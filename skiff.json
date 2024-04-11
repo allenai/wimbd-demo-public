@@ -1,0 +1,6 @@
+{
+    "appName": "wimbd",
+    "contact": "yanaie",
+    "team": "allennlp",
+    "replicas": { "prod": 2 }
+}

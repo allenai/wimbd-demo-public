@@ -1,0 +1,57 @@
+version: '3'
+services:
+    sonar:
+        build: ./sonar
+        depends_on:
+            - api
+            - ui
+            - proxy
+            - db
+
+    db:
+        image: postgres:15.2
+        restart: always
+        ports: ['5432:5432']
+        environment:
+            POSTGRES_USER: foo
+            POSTGRES_PASSWORD: bar
+            POSTGRES_DB: wimbd
+        volumes:
+            - pgdata:/var/lib/postgresql/data
+
+    api:
+        build: ./api
+        volumes:
+            - ./api:/api
+            - ./skiff_files:/skiff_files/apps/wimdb
+        depends_on:
+            - db
+        environment:
+            # This ensures that errors are printed as they occur, which
+            # makes debugging easier.
+            - PYTHONUNBUFFERED=1
+            - LOG_LEVEL=DEBUG
+            - FLASK_ENV=development
+            - POSTGRES_URL=postgres://foo:bar@db/wimbd?sslmode=disable
+    ui:
+        build: ./ui
+        # We can't mount the entire UI directory, since JavaScript dependencies
+        # (`node_modules`) live at that location.
+        volumes:
+            - ./ui/src:/ui/src
+            - ./ui/public:/ui/public
+            - ./ui/package.json:/ui/package.json
+            - ./ui/yarn.lock:/ui/yarn.lock
+            - ./ui/tsconfig.json:/ui/tsconfig.json
+        environment:
+            - NODE_ENV=development
+    proxy:
+        build: ./proxy
+        ports:
+            - 8080:8080
+        depends_on:
+            - ui
+            - api
+
+volumes:
+    pgdata:

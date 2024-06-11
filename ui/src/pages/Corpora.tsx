@@ -36,7 +36,8 @@ export const Corpora = () => {
                     but we can provide individual access keys upon request.
                     Please fill in the following {' '}<Link to="https://forms.gle/Mk9uwJibR9H4hh9Y9">form</Link>.
                     <br/>
-                    For accessing the Dolma dataset, please fill in the following {' '}<Link to="https://forms.gle/ndKx7JnF9WTy6CFs5">form</Link>.
+                    Note that due to some legal issues we are unable to provide access to LAION and the Pile.<br/>
+                    Instead, we can provide access to C4, OpenWebText, RedPajama, and Dolma.
                 </Typography>
             </CenteredTextBlock>
 
